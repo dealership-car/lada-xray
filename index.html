@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LADA XRAY 2018 - Premium Edition</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            letter-spacing: -0.02em;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: #000000;
+        }
+
+        body {
+            background-color: #000000;
+            color: #f5f5f7;
+            overflow-x: hidden;
+            padding-bottom: 120px;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+            padding: 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 48px;
+        }
+
+        .header-logo {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            background: linear-gradient(180deg, #ffffff 0%, #a1a1a6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            line-height: 1;
+        }
+
+        .burger-menu-btn {
+            background: transparent;
+            border: none;
+            width: 44px;
+            height: 100%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 0;
+            z-index: 1060;
+        }
+
+        .burger-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: 22px;
+            position: relative;
+        }
+
+        .burger-lines span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 1px;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            transform-origin: center;
+        }
+
+        .burger-menu-btn.open-state .burger-lines span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .burger-menu-btn.open-state .burger-lines span:nth-child(2) {
+            opacity: 0;
+        }
+        .burger-menu-btn.open-state .burger-lines span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            z-index: 1050;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nav-menu {
+            list-style: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .nav-link {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:active {
+            color: #00a3ff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .hero-gallery-container {
+            position: relative;
+            width: 100vw;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            margin-top: 48px;
+            background: #000000;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            margin-bottom: 8px;
+        }
+
+        .hero-gallery {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            position: relative;
+            touch-action: pan-y;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+            cursor: zoom-in;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .hero-gallery-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, #000000 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            cursor: pointer;
+            width: 44px;
+            height: 60px;
+        }
+
+        .gallery-arrow:active { color: #ffffff; }
+        .gallery-arrow-left { left: 8px; }
+        .gallery-arrow-right { right: 8px; }
+
+        .gallery-arrow svg {
+            width: 26px;
+            height: 26px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .slide-counter {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            z-index: 15;
+            border: 0.5px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .lightbox-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            background: #000000;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .lightbox-top-bar {
+            width: 100%;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            z-index: 2002;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            flex-shrink: 0;
+        }
+
+        .lightbox-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .lightbox-main-view {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .lightbox-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        .lightbox-slide {
+            flex: 0 0 100%;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .lightbox-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .lightbox-bottom-bar {
+            width: 100%;
+            padding: 16px 16px 42px 16px;
+            background: #0b0b0c;
+            border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+            white-space: nowrap;
+            display: flex;
+            gap: 8px;
+            z-index: 2005;
+            flex-shrink: 0;
+            box-shadow: 0 -20px 40px rgba(0,0,0,0.95);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .lightbox-bottom-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .lightbox-thumb {
+            width: 56px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            opacity: 0.4;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .lightbox-thumb.active {
+            border-color: #00a3ff;
+            opacity: 1;
+        }
+
+        .main-title-section {
+            padding: 20px 0 12px 0;
+            text-align: left;
+        }
+
+        .massive-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            background: linear-gradient(180deg, #ffffff 40%, #8e8e93 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #a1a1a6;
+            font-weight: 400;
+            text-align: left;
+        }
+
+        .section-divider {
+            height: 0.5px;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
+            margin: 24px 0;
+            width: 100%;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: left;
+        }
+
+        .scroll-reveal {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .section-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #00a3ff;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 18px;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tech-row {
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+
+        .tech-row:last-child { border-bottom: none; }
+        .tech-label { color: #8e8e93; font-size: 14.5px; }
+        .tech-value { color: #ffffff; font-weight: 500; font-size: 14.5px; text-align: right; }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .bento-cell {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .bento-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+
+        .bento-icon-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(0, 163, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00a3ff;
+        }
+
+        .bento-icon-wrapper svg { width: 16px; height: 16px; }
+        .bento-cell h3 { font-size: 17px; font-weight: 600; color: #ffffff; }
+        .bento-cell p { font-size: 14.5px; line-height: 1.45; color: #8e8e93; text-align: left; }
+
+        .status-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 15px;
+            line-height: 1.45;
+            color: #e5e5ea;
+            text-align: left;
+        }
+
+        .status-indicator {
+            width: 18px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .status-indicator-positive { color: #30d158; }
+        .status-indicator-negative { color: #ff453a; }
+
+        .status-indicator svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 3; }
+
+        .tg-spoiler-card {
+            background: rgba(255, 159, 10, 0.04);
+            border: 1px dashed rgba(255, 159, 10, 0.25);
+            border-radius: 20px;
+            padding: 20px 16px;
+            margin-top: 16px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .tg-spoiler-blur-box {
+            position: relative;
+        }
+
+        .tg-spoiler-text {
+            font-size: 14.5px;
+            line-height: 1.5;
+            color: #f5f5f7;
+            filter: blur(12px);
+            transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: left;
+        }
+
+        .tg-spoiler-overlay-hint {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #ffffff;
+            background: rgba(0,0,0,0.15);
+            z-index: 3;
+        }
+
+        .spoiler-timer-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 0.5px solid rgba(255, 159, 10, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ff9f0a;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 4;
+        }
+
+        @keyframes flamePulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff9f0a); }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 4px #ff453a); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 2px #ff9f0a); }
+        }
+
+        .flame-animation {
+            display: inline-block;
+            animation: flamePulse 0.8s infinite ease-in-out;
+        }
+
+        .tg-spoiler-card.revealed .tg-spoiler-text { filter: blur(0); }
+        .tg-spoiler-card.revealed .tg-spoiler-overlay-hint { opacity: 0; pointer-events: none; }
+
+        .btn-pdf-autoteka {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            background: rgba(48, 209, 88, 0.12);
+            border: 1px solid rgba(48, 209, 88, 0.3);
+            border-radius: 18px;
+            padding: 16px;
+            color: #30d158;
+            font-size: 15.5px;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 16px;
+        }
+
+        .btn-pdf-autoteka:active { background: rgba(48, 209, 88, 0.22); }
+        .btn-pdf-autoteka svg { width: 18px; height: 18px; }
+
+        .msg-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .btn-msg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp { background: rgba(37, 211, 102, 0.12); border: 1px solid rgba(37, 211, 102, 0.25); color: #25d366; }
+        .btn-telegram { background: rgba(0, 136, 204, 0.12); border: 1px solid rgba(0, 136, 204, 0.25); color: #0088cc; }
+        .btn-maxxx { background: rgba(142, 68, 173, 0.15); border: 1px solid rgba(142, 68, 173, 0.35); color: #9b59b6; }
+        .btn-sms { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 24px);
+            max-width: 768px;
+            background: rgba(20, 20, 25, 0.85);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 990;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+
+        .price-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .price-header {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .price-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8e8e93;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .price-old {
+            font-size: 12px;
+            color: #ffffff;
+            text-decoration: line-through;
+            font-weight: 500;
+            opacity: 0.6;
+        }
+
+        .price-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .bottom-actions-wrapper {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-call {
+            background: #ffffff;
+            color: #000000;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-write-nav {
+            background: rgba(0, 163, 255, 0.15);
+            border: 1px solid rgba(0, 163, 255, 0.3);
+            color: #00a3ff;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-logo">LADA XRAY (2018)</div>
+        <button class="burger-menu-btn" id="open-menu-btn">
+            <div class="burger-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+    </header>
+
+    <div class="nav-overlay" id="nav-overlay">
+        <ul class="nav-menu">
+            <li><a href="#about" class="nav-link" onclick="closeMenu()">О машине</a></li>
+            <li><a href="#specs" class="nav-link" onclick="closeMenu()">Характеристики</a></li>
+            <li><a href="#why-choose" class="nav-link" onclick="closeMenu()">Преимущества</a></li>
+            <li><a href="#suitability" class="nav-link" onclick="closeMenu()">Кому подойдет</a></li>
+            <li><a href="#autoteka" class="nav-link" onclick="closeMenu()">Отчет Автотеки</a></li>
+            <li><a href="#contacts" class="nav-link" onclick="closeMenu()">Контакты</a></li>
+        </ul>
+    </div>
+
+    <section class="hero-gallery-container" id="about">
+        <div class="hero-gallery" id="main-gallery-view">
+            <div class="slider-wrapper" id="hero-slider">
+                <div class="slide" data-index="0"><img src="1.webp" draggable="false" alt="Ракурс 1"></div>
+                <div class="slide" data-index="1"><img src="2.webp" draggable="false" alt="Ракурс 2"></div>
+                <div class="slide" data-index="2"><img src="3.webp" draggable="false" alt="Ракурс 3"></div>
+                <div class="slide" data-index="3"><img src="4.webp" draggable="false" alt="Ракурс 4"></div>
+                <div class="slide" data-index="4"><img src="5.webp" draggable="false" alt="Ракурс 5"></div>
+                <div class="slide" data-index="5"><img src="6.webp" draggable="false" alt="Ракурс 6"></div>
+                <div class="slide" data-index="6"><img src="7.webp" draggable="false" alt="Ракурс 7"></div>
+                <div class="slide" data-index="7"><img src="8.webp" draggable="false" alt="Ракурс 8"></div>
+                <div class="slide" data-index="8"><img src="9.webp" draggable="false" alt="Ракурс 9"></div>
+                <div class="slide" data-index="9"><img src="10.webp" draggable="false" alt="Ракурс 10"></div>
+                <div class="slide" data-index="10"><img src="11.webp" draggable="false" alt="Ракурс 11"></div>
+                <div class="slide" data-index="11"><img src="12.webp" draggable="false" alt="Ракурс 12"></div>
+                <div class="slide" data-index="12"><img src="13.webp" draggable="false" alt="Ракурс 13"></div>
+                <div class="slide" data-index="13"><img src="14.webp" draggable="false" alt="Ракурс 14"></div>
+                <div class="slide" data-index="14"><img src="15.webp" draggable="false" alt="Ракурс 15"></div>
+                <div class="slide" data-index="15"><img src="16.webp" draggable="false" alt="Ракурс 16"></div>
+                <div class="slide" data-index="16"><img src="17.webp" draggable="false" alt="Ракурс 17"></div>
+                <div class="slide" data-index="17"><img src="18.webp" draggable="false" alt="Ракурс 18"></div>
+            </div>
+        </div>
+
+        <div class="gallery-arrow gallery-arrow-left" id="prev-slide">
+            <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+        </div>
+        <div class="gallery-arrow gallery-arrow-right" id="next-slide">
+            <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+        <div class="slide-counter" id="slide-counter">1 / 18</div>
+    </section>
+
+    <div class="lightbox-modal" id="lightbox">
+        <div class="lightbox-top-bar">
+            <div id="lightbox-counter" style="font-weight: 600; font-size: 15px;">1 / 18</div>
+            <button class="lightbox-close" id="lightbox-close-btn">Готово</button>
+        </div>
+        <div class="lightbox-main-view" id="lightbox-main-view">
+            <div class="lightbox-wrapper" id="lightbox-wrapper">
+            </div>
+            <div class="gallery-arrow gallery-arrow-left" id="lightbox-prev" style="color: white; left: 12px;"><svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></div>
+            <div class="gallery-arrow gallery-arrow-right" id="lightbox-next" style="color: white; right: 12px;"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="lightbox-bottom-bar" id="lightbox-thumbs">
+        </div>
+    </div>
+
+    <div class="container">
+
+        <section class="main-title-section">
+            <div class="massive-title">LADA XRAY 2018</div>
+            <p class="hero-subtitle">Универсальный городской хэтчбек с высоким клиренсом от одного единственного хозяина за все 8 лет эксплуатации. Полностью прозрачная история, родной ровный пробег и копеечное обслуживание.</p>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="glass-card" id="specs">
+            <span class="section-label">Документы</span>
+            <div class="section-title">Технические данные</div>
+            <div class="tech-table">
+                <div class="tech-row"><div class="tech-label">Год выпуска</div><div class="tech-value">2018 (Эксплуатация с весны 2019)</div></div>
+                <div class="tech-row"><div class="tech-label">Двигатель</div><div class="tech-value">Бензин, 1.6 л (106 л.с.), ВАЗ-21189</div></div>
+                <div class="tech-row"><div class="tech-label">Трансмиссия</div><div class="tech-value">Механическая (МКПП)</div></div>
+                <div class="tech-row"><div class="tech-label">Привод</div><div class="tech-value">Передний</div></div>
+                <div class="tech-row"><div class="tech-label">Цвет кузова</div><div class="tech-value">Белый легковой универсал</div></div>
+                <div class="tech-row"><div class="tech-label">Тип ПТС</div><div class="tech-value">Оригинал (1 собственник)</div></div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="glass-card" id="why-choose">
+            <span class="section-label">Почему стоит выбрать этот авто</span>
+            <div class="section-title">Главные аргументы</div>
+            <div class="bento-grid">
+                <div class="bento-cell">
+                    <div class="bento-header">
+                        <div class="bento-icon-wrapper">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        </div>
+                        <h3>Один хозяин в ПТС</h3>
+                    </div>
+                    <p>8 лет в одних руках физлица. Никаких юрлиц, каршерингов, лизингов или коммерческого использования в такси.</p>
+                </div>
+                <div class="bento-cell">
+                    <div class="bento-header">
+                        <div class="bento-icon-wrapper">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h3>Заводской кузовной окрас</h3>
+                    </div>
+                    <p>Металл и силовые элементы кузова находятся полностью в заводском исполнении. Приезжайте с любым толщиномером.</p>
+                </div>
+                <div class="bento-cell">
+                    <div class="bento-header">
+                        <div class="bento-icon-wrapper">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                        <h3>Честный линейный пробег</h3>
+                    </div>
+                    <p>График пробега в Автотеке стабильно идет вверх, без скачков и скруток: от 7 км при выезде из салона до 129 000 км на сегодня.</p>
+                </div>
+                <div class="bento-cell">
+                    <div class="bento-header">
+                        <div class="bento-icon-wrapper">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <h3>Комплектация со всем необходимым</h3>
+                    </div>
+                    <p>АБС, гидроусилитель руля (ГУР), заправленный рабочий кондиционер, передний электропакет (ПЭП), сигнализация, нештатная качественная аудиосистема и фирменные литые диски LADA.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="glass-card" id="suitability">
+            <span class="section-label">Объективный обзор</span>
+            <div class="section-title">Для кого этот автомобиль?</div>
+
+            <div style="margin-bottom: 24px;">
+                <h4 style="font-size: 16px; font-weight:600; color:#30d158; margin-bottom:12px;">Кому идеально подойдет:</h4>
+                <ul class="status-list">
+                    <li class="status-item">
+                        <div class="status-indicator status-indicator-positive">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <div><strong>Практичным городским жителям:</strong> Высокий дорожный просвет (195 мм) гарантирует безопасную парковку у бордюров и легкое преодоление зимних сугробов во дворах.</div>
+                    </li>
+                    <li class="status-item">
+                        <div class="status-indicator status-indicator-positive">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <div><strong>Для загородных поездок и дачи:</strong> Формат универсала-хэтчбека с трансформируемым салоном позволяет легко перевозить крупногабаритные вещи.</div>
+                    </li>
+                    <li class="status-item">
+                        <div class="status-indicator status-indicator-positive">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                        <div><strong>Ценителям надежной экономии:</strong> Мотор работает стабильно на АИ-92, а копеечная стоимость обслуживания делает владение комфортным для бюджета.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight:600; color:#ff453a; margin-bottom:12px;">Кому НЕ подойдет:</h4>
+                <ul class="status-list">
+                    <li class="status-item">
+                        <div class="status-indicator status-indicator-negative">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </div>
+                        <div><strong>Любителям агрессивных гонок:</strong> Двигатель мощностью 106 л.с. идеален для стабильного городского потока и трассы, но не предназначен для дрэг-рейсинга.</div>
+                    </li>
+                    <li class="status-item">
+                        <div class="status-indicator status-indicator-negative">
+                            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </div>
+                        <div><strong>Искателям премиум-роскоши:</strong> Интерьер выполнен из износостойких практичных материалов без элементов натуральной кожи или дерева.</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="glass-card" id="autoteka">
+            <span class="section-label">Юридическая чистота</span>
+            <div class="section-title">Официальная база данных</div>
+
+            <a href="Отчёт Автотеки - XTAGAB110J1090051.pdf.pdf" target="_blank" class="btn-pdf-autoteka">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Открыть официальный отчет Автотеки (PDF)
+            </a>
+
+            <ul class="status-list" style="margin-top: 8px;">
+                <li class="status-item">
+                    <div class="status-indicator status-indicator-positive">
+                        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <div>Полный порядок с документами: ПТС оригинал, машина полностью готова к мгновенному переоформлению в ГИБДД.</div>
+                </li>
+                <li class="status-item">
+                    <div class="status-indicator status-indicator-positive">
+                        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                    <div>База ФНП чиста: автомобиль никогда не был в залоге, под арестом или ограничениями.</div>
+                </li>
+            </ul>
+
+            <div class="tg-spoiler-card" id="spoiler-card">
+                <div class="spoiler-timer-badge" id="spoiler-timer">
+                    <span class="flame-animation">🔥</span> <span id="timer-count">25с</span>
+                </div>
+                <div class="tg-spoiler-blur-box">
+                    <div class="tg-spoiler-overlay-hint" id="spoiler-hint">Нажмите, чтобы открыть информацию</div>
+                    <p class="tg-spoiler-text" id="spoiler-text">
+                        В базе официально зафиксировано всего 1 мелкое происшествие от 29 августа 2018 года в городе Лаишево. Произошло скользящее парковочное столкновение во дворе со вторым участником (ВАЗ-2114). Инцидент официально классифицирован как «лёгкие повреждения». По схеме пострадал исключительно пластик заднего бампера. Родной металл кузова, крылья и крышка багажника не задеты. Бампер остался заводским оригинальным, ремонтные работы не проводились. На аукционах тотальных машин авто никогда не числилось.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="glass-card">
+            <span class="section-label">Резюме</span>
+            <div class="section-title">Комфорт и уверенность</div>
+            <p style="font-size: 15px; line-height: 1.5; color: #e5e5ea; margin-bottom: 12px; text-align: left;">
+                Перед вами максимально честный, ухоженный и полностью готовый к дальнейшей эксплуатации автомобиль. Машина не требует абсолютно никаких дополнительных вложений по технической части - ходовая отрабатывает идеально, коробка переключается мягко, а двигатель работает как часы. Салон чистый, не затертый, в машине приятно находиться.
+            </p>
+            <p style="font-size: 15px; line-height: 1.5; color: #e5e5ea; text-align: left;">
+                Этот XRAY имеет идеальную историю владения. Заводские маркировки на элементах оптики и стеклах подтверждают аутентичность состояния кузова. Покупая данный автомобиль, вы приобретаете надежного помощника для повседневных дел, семейных поездок и путешествий, который гарантированно прослужит вам долгие годы без лишних хлопот.
+            </p>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <section class="glass-card" id="contacts" style="margin-bottom: 40px;">
+            <span class="section-label">Прямая связь</span>
+            <div class="section-title">Написать владельцу</div>
+            <div class="msg-grid">
+                <a href="https://wa.me/79186784397" target="_blank" class="btn-msg btn-whatsapp" id="goal-wa">WhatsApp</a>
+                <a href="https://t.me/+79186784397" target="_blank" class="btn-msg btn-telegram" id="goal-tg">Telegram</a>
+                <a href="https://max.ru/u/f9LHodD0cOJCBJmqXspAxkg1bScNdVdrS2psMW1gyqEkzMkjWBGYOu6mn14" target="_blank" class="btn-msg btn-maxxx" id="goal-maxx">MAX</a>
+                <a href="sms:+79186784397?body=Привет!%20По%20поводу%20LADA%20XRAY" class="btn-msg btn-sms">Отправить SMS</a>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="bottom-bar">
+        <div class="price-container">
+            <div class="price-header">
+                <span class="price-label">Стоимость</span>
+                <span class="price-old">915 000 ₽</span>
+            </div>
+            <div class="price-value">885 000 ₽</div>
+        </div>
+        <div class="bottom-actions-wrapper">
+            <a href="tel:+79186784397" class="btn-call" id="goal-call">Позвонить</a>
+            <a href="#contacts" class="btn-write-nav">Написать</a>
+        </div>
+    </div>
+
+    <script>
+        const openMenuBtn = document.getElementById('open-menu-btn');
+        const navOverlay = document.getElementById('nav-overlay');
+
+        openMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navOverlay.classList.toggle('open');
+            openMenuBtn.classList.toggle('open-state', isOpen);
+        });
+
+        function closeMenu() {
+            navOverlay.classList.remove('open');
+            openMenuBtn.classList.remove('open-state');
+        }
+
+        document.addEventListener('click', (e) => {
+            if (navOverlay.classList.contains('open') && !navOverlay.contains(e.target) && e.target !== openMenuBtn) {
+                closeMenu();
+            }
+        });
+
+        const spoilerCard = document.getElementById('spoiler-card');
+        const timerBadge = document.getElementById('spoiler-timer');
+        const timerCount = document.getElementById('timer-count');
+        let timerInterval = null;
+
+        spoilerCard.addEventListener('click', () => {
+            if (!spoilerCard.classList.contains('revealed')) {
+                spoilerCard.classList.add('revealed');
+                timerBadge.style.opacity = '1';
+
+                let timeLeft = 25;
+                timerCount.textContent = timeLeft + 'с';
+
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerCount.textContent = timeLeft + 'с';
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        spoilerCard.classList.remove('revealed');
+                        timerBadge.style.opacity = '0';
+                    }
+                }, 1000);
+            }
+        });
+
+        const slider = document.getElementById('hero-slider');
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('slide-counter');
+        const prevBtn = document.getElementById('prev-slide');
+        const nextBtn = document.getElementById('next-slide');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        let startX = 0;
+        let isMoved = false;
+
+        function updateSliderPosition() {
+            slider.style.transform = `translate3d(-${currentSlide * 100}vw, 0, 0)`;
+            counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+        }
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSliderPosition();
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSliderPosition();
+        });
+
+        slides.forEach((slide) => {
+            slide.addEventListener('pointerdown', (e) => {
+                startX = e.clientX;
+                isMoved = false;
+            });
+
+            slide.addEventListener('pointermove', (e) => {
+                let currentX = e.clientX;
+                if (Math.abs(currentX - startX) > 10) {
+                    isMoved = true;
+                }
+            });
+
+            slide.addEventListener('pointerup', (e) => {
+                if (!isMoved) {
+                    const index = parseInt(slide.getAttribute('data-index'));
+                    openLightboxMode(index);
+                } else {
+                    let endX = e.clientX;
+                    let diffX = startX - endX;
+                    if (diffX > 40) {
+                        currentSlide = (currentSlide + 1) % totalSlides;
+                        updateSliderPosition();
+                    } else if (diffX < -40) {
+                        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                        updateSliderPosition();
+                    }
+                }
+            });
+        });
+
+        const lightbox = document.getElementById('lightbox');
+        const lightboxWrapper = document.getElementById('lightbox-wrapper');
+        const lightboxThumbs = document.getElementById('lightbox-thumbs');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        let currentLightboxSlide = 0;
+        let lbStartX = 0;
+        let lbIsMoved = false;
+
+        slides.forEach((slide, index) => {
+            const imgEl = slide.querySelector('img');
+            if (!imgEl) return;
+            const imgSrc = imgEl.getAttribute('src');
+
+            const lSlide = document.createElement('div');
+            lSlide.className = 'lightbox-slide';
+            lSlide.innerHTML = `<img src="${imgSrc}" alt="LADA XRAY Ракурс">`;
+            lightboxWrapper.appendChild(lSlide);
+
+            const thumb = document.createElement('img');
+            thumb.className = 'lightbox-thumb';
+            thumb.setAttribute('src', imgSrc);
+            thumb.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentLightboxSlide = index;
+                updateLightboxPosition();
+            });
+            lightboxThumbs.appendChild(thumb);
+        });
+
+        function openLightboxMode(index) {
+            currentLightboxSlide = index;
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            updateLightboxPosition();
+        }
+
+        function updateLightboxPosition() {
+            lightboxWrapper.style.transform = `translate3d(-${currentLightboxSlide * 100}vw, 0, 0)`;
+            lightboxCounter.textContent = `${currentLightboxSlide + 1} / ${totalSlides}`;
+
+            const thumbs = lightboxThumbs.querySelectorAll('.lightbox-thumb');
+            thumbs.forEach((t, i) => t.classList.toggle('active', i === currentLightboxSlide));
+
+            const activeThumb = thumbs[currentLightboxSlide];
+            if(activeThumb) {
+                lightboxThumbs.scrollTo({
+                    left: activeThumb.offsetLeft - lightboxThumbs.offsetWidth / 2 + activeThumb.offsetWidth / 2,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        document.getElementById('lightbox-next').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentLightboxSlide = (currentLightboxSlide + 1) % totalSlides;
+            updateLightboxPosition();
+        });
+
+        document.getElementById('lightbox-prev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentLightboxSlide = (currentLightboxSlide - 1 + totalSlides) % totalSlides;
+            updateLightboxPosition();
+        });
+
+        lightboxWrapper.addEventListener('pointerdown', (e) => {
+            lbStartX = e.clientX;
+            lbIsMoved = false;
+        });
+
+        lightboxWrapper.addEventListener('pointermove', (e) => {
+            if (Math.abs(e.clientX - lbStartX) > 10) lbIsMoved = true;
+        });
+
+        lightboxWrapper.addEventListener('pointerup', (e) => {
+            if (lbIsMoved) {
+                let diffX = lbStartX - e.clientX;
+                if (diffX > 40) {
+                    currentLightboxSlide = (currentLightboxSlide + 1) % totalSlides;
+                    updateLightboxPosition();
+                } else if (diffX < -40) {
+                    currentLightboxSlide = (currentLightboxSlide - 1 + totalSlides) % totalSlides;
+                    updateLightboxPosition();
+                }
+            }
+        });
+
+        document.getElementById('lightbox-close-btn').addEventListener('click', () => {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    </script>
+</body>
+</html>
